@@ -22,4 +22,14 @@ func SendEmailAlert(server string) {
 		return
 	}
 	fmt.Println("Alert email sent successfully")
+
+	// Send webhook notification
+	webhookURL := os.Getenv("WEBHOOK_URL")
+	webhookMessage := fmt.Sprintf("Alert: Server %s is DOWN!", server)
+	err = SendWebhook(webhookURL, webhookMessage)
+	if err != nil {
+		fmt.Println("Error sending webhook:", err)
+	} else {
+		fmt.Println("Webhook notification sent successfully")
+	}
 }

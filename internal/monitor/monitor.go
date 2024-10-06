@@ -16,9 +16,9 @@ type Monitor struct {
 
 func NewMonitor() *Monitor {
 	return &Monitor{
-		Servers:  []string{"192.168.1.1", "google.com"}, // Tambahkan alamat server yang ingin dipantau contoh google
+		Servers:  []string{"192.168.1.1", "invalid-server.com"}, // Tambahkan alamat server yang ingin dipantau
 		Status:   make(map[string]string),
-		Interval: 10 * time.Second, 
+		Interval: 10 * time.Second,
 	}
 }
 
@@ -43,8 +43,9 @@ func (m *Monitor) StartMonitoring() {
 			status := PingServer(server)
 			previousStatus := m.Status[server]
 
+			// Jika status berubah menjadi DOWN, kirim alert
 			if status == "DOWN" && previousStatus != "DOWN" {
-				alert.SendEmailAlert(server)
+				alert.SendEmailAlert(server) // Mengirimkan email alert
 			}
 
 			m.Status[server] = status
